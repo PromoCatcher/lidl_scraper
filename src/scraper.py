@@ -9,7 +9,7 @@ def scrape_url_links(week_dates: str) -> list[str]:
     img_links: list[str] = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         page = browser.new_page()
 
         logger.info("Browser initiated.")
@@ -19,8 +19,9 @@ def scrape_url_links(week_dates: str) -> list[str]:
 
         logger.info("Accept cookies")
         try:
-            page.click("#onetrust-accept-btn-handler", timeout=5000)
-        except Exception:
+            page.click("#onetrust-accept-btn-handler", timeout=10000)
+        except Exception as e:
+            logger.error(str(e))
             logger.error("Error on click on brochure")
             raise Exception("Error on click on brochure")
         
@@ -50,7 +51,8 @@ def scrape_url_links(week_dates: str) -> list[str]:
                     "button.button.button--primary-negative.button--label-uppercase.button--bold.button--icon.button--center.button--hover-background.button--navigation.button--navigation-lidl[aria-label='Следваща страница']",
                     timeout=5000,
                 )
-            except Exception:
+            except Exception as e:
+                logger.error(str(e))
                 logger.error("Error on click on next button")
                 break
 
