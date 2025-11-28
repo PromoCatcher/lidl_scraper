@@ -9,7 +9,7 @@ def scrape_url_links(week_dates: str) -> list[str]:
     img_links: list[str] = []
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         page = browser.new_page()
 
         logger.info("Browser initiated.")
